@@ -1,228 +1,3 @@
-A continuación se detallan las 15 entidades para la base de datos de la plataforma:
-
-USUARIO
-Lectores y escritores de la plataforma.
-
-PK id: UUID ● Identificador único.
-
-nombre: VARCHAR(100) ● Nombre visible del usuario.
-
-IDX email: VARCHAR(255) ● Correo único para autenticación.
-
-password_hash: VARCHAR(255) ● Hash bcrypt de la contraseña.
-
-avatar_url: TEXT ○ URL imagen de perfil.
-
-bio: TEXT ○ Descripción del perfil.
-
-rol: ENUM ● lector · autor · admin.
-
-activo: BOOLEAN ● Cuenta habilitada (default true).
-
-fecha_registro: TIMESTAMP ● Fecha y hora de creación.
-
-ultimo_acceso: TIMESTAMP ○ Última sesión iniciada.
-------------------
-OBRA
-Obras literarias publicadas o en progreso.
-
-PK id: UUID ● Identificador único.
-
-FK autor_id: UUID ● Referencia a USUARIO.
-
-titulo: VARCHAR(200) ● Título de la obra.
-
-sinopsis: TEXT ○ Descripción / resumen.
-
-portada_url: TEXT ○ URL imagen de portada.
-
-tipo: ENUM ● novela · cuento · poema · ensayo.
-
-estado: ENUM ● borrador · en_progreso · completa · pausada.
-
-es_original: BOOLEAN ● Obra original o derivada/fanfic.
-
-idioma: VARCHAR(10) ● Código ISO (es, en, fr…).
-
-visitas: INTEGER ● Contador acumulado de lecturas (default 0).
-
-publicado_en: TIMESTAMP ○ Fecha de primera publicación.
-
-actualizado_en: TIMESTAMP ● Última modificación.
-------------------------
-CAPITULO
-Unidad de contenido dentro de una obra.
-
-PK id: UUID ● Identificador único.
-
-FK obra_id: UUID ● Referencia a OBRA.
-
-numero: INTEGER ● Posición en la obra (1, 2, 3…).
-
-titulo: VARCHAR(200) ○ Título del capítulo.
-
-contenido: TEXT ● Cuerpo del capítulo (markdown/html).
-
-palabras: INTEGER ● Conteo de palabras (calculado).
-
-publicado: BOOLEAN ● Visible para lectores (default false).
-
-creado_en: TIMESTAMP ● Fecha de creación.
-
-publicado_en: TIMESTAMP ○ Fecha en que se hizo público.
-------------------------------------
-GENERO
-Categorías literarias principales.
-
-PK id: UUID ● Identificador único.
-
-nombre: VARCHAR(80) ● Nombre del género (Romance, Suspenso…).
-
-descripcion: TEXT ○ Descripción breve del género.
-
-icono_url: TEXT ○ Ícono o imagen representativa.
--------------------
-OBRA_GENERO
-Relación muchos a muchos obra–género.
-
-PK FK obra_id: UUID ● Referencia a OBRA.
-
-PK FK genero_id: UUID ● Referencia a GENERO.
-------------------------
-ETIQUETA
-Tags granulares definidos por el autor.
-
-PK id: UUID ● Identificador único.
-
-nombre: VARCHAR(60) ● Texto del tag (ej. magia-suave).
---------------------------
-OBRA_ETIQUETA
-Relación muchos a muchos obra–etiqueta.
-
-PK FK obra_id: UUID ● Referencia a OBRA.
-
-PK FK etiqueta_id: UUID ● Referencia a ETIQUETA.
-------------------------------------------------
-BIBLIOTECA
-Lista personal de obras del usuario.
-
-PK id: UUID ● Identificador único.
-
-FK usuario_id: UUID ● Referencia a USUARIO.
-
-FK obra_id: UUID ● Referencia a OBRA.
-
-estado: ENUM ● quiero_leer · leyendo · completada · abandonada.
-
-agregado_en: TIMESTAMP ● Fecha en que se añadió a la biblioteca.
-------------------------------------------
-PROGRESO_LECTURA
-Posición de lectura por usuario y obra.
-
-PK id: UUID ● Identificador único.
-
-FK usuario_id: UUID ● Referencia a USUARIO.
-
-FK obra_id: UUID ● Referencia a OBRA.
-
-FK capitulo_id: UUID ● Último capítulo leído.
-
-posicion: INTEGER ● Posición de scroll dentro del capítulo (px).
-
-porcentaje: DECIMAL(5,2) ● % leído de la obra completa.
-
-actualizado_en: TIMESTAMP ● Última actualización del progreso.
-----------------------------------------
-RESENA
-Calificación y comentario de una obra completa.
-
-PK id: UUID ● Identificador único.
-
-FK usuario_id: UUID ● Referencia a USUARIO.
-
-FK obra_id: UUID ● Referencia a OBRA.
-
-puntuacion: INTEGER ● Calificación del 1 al 5.
-
-comentario: TEXT ○ Texto de la reseña.
-
-creado_en: TIMESTAMP ● Fecha de publicación.
-
-editado_en: TIMESTAMP ○ Última edición.
------------------------------------------------------------
-COMENTARIO
-Hilos de comentarios por capítulo.
-
-PK id: UUID ● Identificador único.
-
-FK usuario_id: UUID ● Referencia a USUARIO.
-
-FK capitulo_id: UUID ● Referencia a CAPITULO.
-
-FK parent_id: UUID ○ Referencia a COMENTARIO (respuesta).
-
-contenido: TEXT ● Texto del comentario.
-
-eliminado: BOOLEAN ● Soft delete (default false).
-
-creado_en: TIMESTAMP ● Fecha de publicación.
--------------------------------------
-LIKE_OBRA
-Likes de usuarios a obras.
-
-PK FK usuario_id: UUID ● Referencia a USUARIO.
-
-PK FK obra_id: UUID ● Referencia a OBRA.
-
-creado_en: TIMESTAMP ● Momento en que se dio el like.
-------------------------------------
-LIKE_COMENTARIO
-Likes de usuarios a comentarios.
-
-PK FK usuario_id: UUID ● Referencia a USUARIO.
-
-PK FK comentario_id: UUID ● Referencia a COMENTARIO.
-
-creado_en: TIMESTAMP ● Momento en que se dio el like.
----------------------------------------------
-SEGUIMIENTO
-Red social entre autores y lectores.
-
-PK FK seguidor_id: UUID ● Usuario que sigue (ref. USUARIO).
-
-PK FK seguido_id: UUID ● Usuario seguido (ref. USUARIO).
-
-creado_en: TIMESTAMP ● Fecha en que se inició el seguimiento.
----------------------------------------------------------------
-NOTIFICACION
-Centro de alertas del usuario.
-
-PK id: UUID ● Identificador único.
-
-FK usuario_id: UUID ● Destinatario (ref. USUARIO).
-
-tipo: ENUM ● nuevo_cap · nuevo_seguidor · comentario · like.
-
-datos: JSONB ○ Payload variable según el tipo.
-
-leida: BOOLEAN ● Estado de lectura (default false).
-
-creado_en: TIMESTAMP ● Fecha de generación.
------------------------------------------------------
-SUSCRIPCION
-Alertas de nuevos capítulos por obra.
-
-PK id: UUID ● Identificador único.
-
-FK usuario_id: UUID ● Referencia a USUARIO.
-
-FK obra_id: UUID ● Referencia a OBRA.
-
-creado_en: TIMESTAMP ● Fecha de suscripción.
-
-
----
-
 # 📖 Plan de Implementación Maestro: Lecturas App (Markdown)
 
 **Versión:** 1.0 (Final - Completa)
@@ -230,6 +5,54 @@ creado_en: TIMESTAMP ● Fecha de suscripción.
 **Arquitectura:** MVVM + Provider (Feature-First)
 
 **Estética:** Neon Night (Fondo Negro / Rosa Fuerte / Rosa Claro)
+
+---
+## Herramientas y Entorno de Desarrollo
+| Categoría | Herramienta | Propósito |
+|-----------|-------------|-----------|
+| **SDK/Lenguaje** | Flutter 3.x + Dart 3.x | Framework multiplataforma y lenguaje principal |
+| **IDE** | VS Code | Edición, depuración y terminal integrada |
+| **Extensiones VS Code** | Flutter, Dart, Firebase, Error Lens, Pubspec Assist, Todo Tree | Autocompletado, análisis de errores, gestión de dependencias |
+| **Backend/Cloud** | Firebase Console + Firebase CLI | Auth, Firestore, Storage, Cloud Messaging, Crashlytics |
+| **Diseño UI/UX** | Figma / Penpot | Wireframes, prototipos interactivos, guía de estilos |
+| **Control de Versiones** | Git + GitHub/GitLab | Seguimiento de cambios, ramas, CI/CD futuro |
+| **Emuladores/Dispositivos** | Android Studio (SDK Manager), Xcode (iOS), Firebase Emulator Suite | Pruebas locales, simulación de backend sin costos |
+
+---
+##  Principios UI/UX
+1. **Enfoque en lectura:** Tipografía serif/sans-serif escalable, interlineado generoso, márgenes amplios, soporte nativo de modo claro/oscuro.
+2. **Navegación intuitiva:** Barra inferior con 4 pestañas: `Inicio`, `Explorar/Buscar`, `Escribir`, `Mi Biblioteca`. Drawer o perfil lateral para `Configuración` y `Notificaciones`.
+3. **Jerarquía visual:** Portadas destacadas, tarjetas con metadatos (autor, género, progreso), indicadores de lectura (porcentaje, último capítulo).
+4. **Feedback inmediato:** Toasts/snackbars para acciones (guardar, comentar, publicar), animaciones suaves en transiciones, estados de carga skeleton.
+5. **Accesibilidad:** Soporte para texto dinámico, contraste WCAG AA, navegación por teclado/lector de pantalla.
+
+---
+## Dependencias Requeridas (Referencia conceptual)
+> 📝 *Se listan por categoría. No se incluye sintaxis YAML para cumplir con "sin código".*
+
+| Categoría | Paquetes Clave | Función |
+|-----------|----------------|---------|
+| **Core Firebase** | `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage`, `firebase_messaging` | Autenticación, base de datos, archivos, notificaciones push |
+| **Estado** | `provider` | Gestión reactiva de estado global y local |
+| **UI/UX** | `flutter_svg`, `cached_network_image`, `flutter_markdown`, `google_fonts`, `intl` | Imágenes optimizadas, renderizado de texto enriquecido, localización de fechas |
+| **Utilidades** | `uuid`, `shared_preferences`, `flutter_localizations`, `image_picker` | IDs únicos, configuración local, selección de imágenes para perfiles/portadas |
+| **Navegación** | `go_router` o `auto_route` (opcional) | Enrutamiento declarativo, parámetros, guardias de autenticación |
+| **Testing** | `mocktail`, `firebase_auth_mocks`, `cloud_firestore_mocks` | Pruebas unitarias y de widget sin conectar a Firebase real |
+
+---
+Arquitectura y Gestión de Estado (Provider)
+- **Patrón:** MVVM ligero (Model-View-ViewModel) adaptado a Flutter.
+- **Capas:**
+  - `presentation/`: Pantallas, widgets, temas.
+  - `application/`: Servicios, controladores de estado (Provider), validaciones.
+  - `domain/`: Entidades puras (User, Work, Chapter, Comment, List, Notification).
+  - `infrastructure/`: Repositorios, mapeo Firestore ↔ Entidades, clientes Firebase.
+- **Providers principales:**
+  - `AuthProvider`: Estado de sesión, perfil, validación de permisos.
+  - `LibraryProvider`: Lecturas guardadas, progreso, listas personalizadas.
+  - `InteractionProvider`: Comentarios, corazones, actividad reciente.
+  - `NotificationProvider`: Bandeja de entrada, preferencias de alerta.
+- **Estrategia de actualización:** `ChangeNotifierProvider` para cambios globales, `ProxyProvider` para datos dependientes, `FutureProvider`/`StreamProvider` para datos asíncronos de Firestore.
 
 ---
 

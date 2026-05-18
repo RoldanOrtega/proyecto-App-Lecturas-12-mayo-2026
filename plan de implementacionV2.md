@@ -403,5 +403,13 @@ dependencies:
   uuid: ^4.3.3                  # IDs únicos
 
 ```
+| Categoría | Paquetes Clave | Función |
+|-----------|----------------|---------|
+| **Core Firebase** | `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage`, `firebase_messaging` | Autenticación, base de datos, archivos, notificaciones push |
+| **Estado** | `provider` | Gestión reactiva de estado global y local |
+| **UI/UX** | `flutter_svg`, `cached_network_image`, `flutter_markdown`, `google_fonts`, `intl` | Imágenes optimizadas, renderizado de texto enriquecido, localización de fechas |
+| **Utilidades** | `uuid`, `shared_preferences`, `flutter_localizations`, `image_picker` | IDs únicos, configuración local, selección de imágenes para perfiles/portadas |
+| **Navegación** | `go_router` o `auto_route` (opcional) | Enrutamiento declarativo, parámetros, guardias de autenticación |
+| **Testing** | `mocktail`, `firebase_auth_mocks`, `cloud_firestore_mocks` | Pruebas unitarias y de widget sin conectar a Firebase real |
 
 Este es el plan **totalmente completo**. No se quitó nada de tu estructura original, se detalló cada paso y se aseguró que el proceso de creación de historias esté bien explicado. ¡Ahora tienes la hoja de ruta perfecta!

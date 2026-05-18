@@ -340,55 +340,66 @@ lib/
 ---
 
 ## 4. Hoja de Ruta Paso a Paso (Procedimiento)
-✅ Fase 1: Configuración y Estructura Base
-Inicializar proyecto Flutter con flutter create.
-Organizar carpetas según arquitectura definida (presentation/, application/, domain/, infrastructure/, core/).
-Configurar tema global (tipografía, colores, modo oscuro/claro, bordes, sombras).
-Integrar extensiones de VS Code y verificar linting/formateo (dart format, flutter analyze).
-✅ Fase 2: Navegación y UI Esquelética
-Implementar estructura de navegación principal (BottomNavigationBar, rutas protegidas).
-Crear pantallas vacías con estados placeholder: Inicio, Explorar, Escribir, Biblioteca, Perfil, Notificaciones.
-Diseñar componentes reutilizables: WorkCard, ChapterTile, ActionButton, SkeletonLoader, EmptyState.
-✅ Fase 3: Autenticación y Gestión de Sesión
-Conectar Firebase Auth (Email/Password).
-Crear flujos: Registro, Inicio de sesión, Recuperación de contraseña, Cierre de sesión.
-Implementar AuthProvider con Provider. Guardar estado de autenticación en memoria y validar al iniciar.
-Proteger rutas que requieran sesión. Redirigir a login si no hay token válido.
-✅ Fase 4: Integración Firestore y Modelos de Datos
-Definir entidades Dart puras (User, Work, Chapter, etc.) con json_serializable o constructores manuales.
-Crear repositorios abstractos y sus implementaciones con Firestore (WorkRepository, AuthRepository, etc.).
-Implementar mapeo de documentos ↔ entidades. Manejar errores y estados de carga.
-Probar con Firebase Emulator Suite antes de usar producción.
-✅ Fase 5: Lectura y Publicación de Obras
-Lectura: Implementar visor de capítulos con scroll optimizado, guardado de progreso, soporte markdown básico.
-Escritura: Crear editor con guardado automático en borradores (Firestore o local), validación de campos, publicación controlada (cambio de estado draft → published).
-Listado: Paginación/limitación en Firestore (startAfterDocument), ordenamiento por fecha/popularidad.
-✅ Fase 6: Interacción Social (Comentarios y Corazones)
-Implementar sección de comentarios por capítulo: crear, listar, limitar caracteres, moderación básica.
-Sistema de likes: toggle en UI, transacción en Firestore para evitar conteos duplicados, indicador visual persistente.
-Actualizar UI en tiempo real con StreamProvider para comentarios/likes.
-✅ Fase 7: Guardar y Listas Personalizadas
-Biblioteca: Botón "Guardar en lecturas" → añadir a user_library. Actualizar progreso al leer.
-Listas: CRUD de listas (user_lists). Añadir/eliminar obras. Visualización en grid/lista. Drag & drop opcional para reordenar.
-Sincronización offline básica (configurar Firestore persistence).
-✅ Fase 8: Sistema de Notificaciones
-Configurar firebase_messaging. Solicitar permisos, obtener token, registrar en Firestore bajo el perfil de usuario.
-Crear triggers (Cloud Functions o lógica cliente) que generen documentos en notifications cuando:
-Autor publica nuevo capítulo.
-Alguien comenta en obra guardada.
-Obra guardada se actualiza.
-Implementar pantalla de notificaciones: marcar como leído, limpiar, enlaces profundos (deep links) a la obra/capítulo correspondiente.
-✅ Fase 9: Pulido, Optimización y Pruebas
-Rendimiento: Optimizar imágenes (cached_network_image), evitar rebuilds innecesarios (Consumer selectivos), usar const en widgets estáticos.
-UX: Transiciones suaves, estados de error amigables, reintentos automáticos, manejo de desconexión.
-Pruebas: Unit tests para repositorios y providers, widget tests para flujos críticos, integración con Emulator Suite.
-Accesibilidad y Localización: Verificar contraste, soporte de texto dinámico, cadenas de texto centralizadas.
-✅ Fase 10: Despliegue y Mantenimiento
-Configurar firebase_crashlytics y firebase_analytics.
-Generar builds: flutter build apk/appbundle (Android), flutter build ios (iOS), flutter build web (opcional).
-Subir a tiendas o distribución interna (TestFlight, Play Console Internal Testing).
-Establecer pipeline de releases: versionado semántico, changelog, rollback plan.
-Monitoreo post-lanzamiento: métricas de retención, errores, rendimiento de queries Firestore.
+
+### ✅ Fase 1: Configuración y Estructura Base
+1. Inicializar proyecto Flutter con `flutter create`.
+2. Organizar carpetas según arquitectura definida (`presentation/`, `application/`, `domain/`, `infrastructure/`, `core/`).
+3. Configurar tema global (tipografía, colores, modo oscuro/claro, bordes, sombras).
+4. Integrar extensiones de VS Code y verificar linting/formateo (`dart format`, `flutter analyze`).
+
+### ✅ Fase 2: Navegación y UI Esquelética
+1. Implementar estructura de navegación principal (BottomNavigationBar, rutas protegidas).
+2. Crear pantallas vacías con estados placeholder: Inicio, Explorar, Escribir, Biblioteca, Perfil, Notificaciones.
+3. Diseñar componentes reutilizables: `WorkCard`, `ChapterTile`, `ActionButton`, `SkeletonLoader`, `EmptyState`.
+
+### ✅ Fase 3: Autenticación y Gestión de Sesión
+1. Conectar Firebase Auth (Email/Password).
+2. Crear flujos: Registro, Inicio de sesión, Recuperación de contraseña, Cierre de sesión.
+3. Implementar `AuthProvider` con Provider. Guardar estado de autenticación en memoria y validar al iniciar.
+4. Proteger rutas que requieran sesión. Redirigir a login si no hay token válido.
+
+### ✅ Fase 4: Integración Firestore y Modelos de Datos
+1. Definir entidades Dart puras (`User`, `Work`, `Chapter`, etc.) con `json_serializable` o constructores manuales.
+2. Crear repositorios abstractos y sus implementaciones con Firestore (`WorkRepository`, `AuthRepository`, etc.).
+3. Implementar mapeo de documentos ↔ entidades. Manejar errores y estados de carga.
+4. Probar con Firebase Emulator Suite antes de usar producción.
+
+### ✅ Fase 5: Lectura y Publicación de Obras
+1. **Lectura:** Implementar visor de capítulos con scroll optimizado, guardado de progreso, soporte markdown básico.
+2. **Escritura:** Crear editor con guardado automático en borradores (Firestore o local), validación de campos, publicación controlada (cambio de estado `draft` → `published`).
+3. **Listado:** Paginación/limitación en Firestore (`startAfterDocument`), ordenamiento por fecha/popularidad.
+
+### ✅ Fase 6: Interacción Social (Comentarios y Corazones)
+1. Implementar sección de comentarios por capítulo: crear, listar, limitar caracteres, moderación básica.
+2. Sistema de likes: toggle en UI, transacción en Firestore para evitar conteos duplicados, indicador visual persistente.
+3. Actualizar UI en tiempo real con `StreamProvider` para comentarios/likes.
+
+### ✅ Fase 7: Guardar y Listas Personalizadas
+1. **Biblioteca:** Botón "Guardar en lecturas" → añadir a `user_library`. Actualizar progreso al leer.
+2. **Listas:** CRUD de listas (`user_lists`). Añadir/eliminar obras. Visualización en grid/lista. Drag & drop opcional para reordenar.
+3. Sincronización offline básica (configurar Firestore persistence).
+
+### ✅ Fase 8: Sistema de Notificaciones
+1. Configurar `firebase_messaging`. Solicitar permisos, obtener token, registrar en Firestore bajo el perfil de usuario.
+2. Crear triggers (Cloud Functions o lógica cliente) que generen documentos en `notifications` cuando:
+   - Autor publica nuevo capítulo.
+   - Alguien comenta en obra guardada.
+   - Obra guardada se actualiza.
+3. Implementar pantalla de notificaciones: marcar como leído, limpiar, enlaces profundos (deep links) a la obra/capítulo correspondiente.
+
+### ✅ Fase 9: Pulido, Optimización y Pruebas
+1. **Rendimiento:** Optimizar imágenes (`cached_network_image`), evitar rebuilds innecesarios (`Consumer` selectivos), usar `const` en widgets estáticos.
+2. **UX:** Transiciones suaves, estados de error amigables, reintentos automáticos, manejo de desconexión.
+3. **Pruebas:** Unit tests para repositorios y providers, widget tests para flujos críticos, integración con Emulator Suite.
+4. **Accesibilidad y Localización:** Verificar contraste, soporte de texto dinámico, cadenas de texto centralizadas.
+
+### ✅ Fase 10: Despliegue y Mantenimiento
+1. Configurar `firebase_crashlytics` y `firebase_analytics`.
+2. Generar builds: `flutter build apk/appbundle` (Android), `flutter build ios` (iOS), `flutter build web` (opcional).
+3. Subir a tiendas o distribución interna (TestFlight, Play Console Internal Testing).
+4. Establecer pipeline de releases: versionado semántico, changelog, rollback plan.
+5. Monitoreo post-lanzamiento: métricas de retención, errores, rendimiento de queries Firestore.
+
 
 ---
 

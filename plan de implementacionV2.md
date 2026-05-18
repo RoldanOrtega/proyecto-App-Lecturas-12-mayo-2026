@@ -339,42 +339,56 @@ lib/
 
 ---
 
-## 4. Procedimiento Paso a Paso del Desarrollo
-
-### 4.1. Paso 1: Configuración Inicial e Identidad
-
-1. **Vincular Firebase:** Configurar Android/iOS/Web. Habilitar Auth, Firestore y Storage.
-2. **App Setup:** Configurar `main.dart` e inicializar `Firebase`.
-3. **Theme Setup:** Definir en `app_theme.dart` el fondo negro y botones Rosa Claro.
-
-### 4.2. Paso 2: Autenticación y Roles
-
-1. Implementar `AuthService`. Al registrarse, asignar por defecto `rol: 'lector'`.
-2. Crear pantallas de Login/Registro con estética Rosa sobre Negro.
-
-### 4.3. Paso 3: Módulo de Creación de Historias (CRUD Autor)
-
-Aquí es donde el usuario se vuelve autor:
-
-1. **Crear Obra (Create):** Formulario para Título, Género y Sinopsis.
-2. **Subir Portada (Create):** `StorageService` sube la imagen y devuelve la URL.
-3. **Gestión de Capítulos (CRUD):** * **Añadir:** Editor de texto para escribir contenido nuevo.
-* **Editar:** Modificar capítulos existentes.
-* **Borrar:** Eliminar capítulos o la obra completa si es necesario.
-
-
-
-### 4.4. Paso 4: Feed, Lectura e Interacción
-
-1. **Home (Read):** `StreamBuilder` para cargar las portadas de la colección `obras`.
-2. **Lector (Read/Update):** Al leer, `LibraryProvider` actualiza el `progreso` en la colección `biblioteca`.
-3. **Interacción (Create):** Los lectores pueden dejar comentarios al final de cada capítulo.
-
-### 4.5. Paso 5: Biblioteca, Listas y Notificaciones
-
-1. **Biblioteca:** El usuario ve su progreso y libros guardados.
-2. **Listas (CRUD):** Crear carpetas personalizadas (ej: "Terror Favorito") y agregar libros mediante su ID.
-3. **Notificaciones:** Al publicar un nuevo capítulo, se genera un documento en la colección `notificaciones` para todos los seguidores de la obra.
+## 4. Hoja de Ruta Paso a Paso (Procedimiento)
+✅ Fase 1: Configuración y Estructura Base
+Inicializar proyecto Flutter con flutter create.
+Organizar carpetas según arquitectura definida (presentation/, application/, domain/, infrastructure/, core/).
+Configurar tema global (tipografía, colores, modo oscuro/claro, bordes, sombras).
+Integrar extensiones de VS Code y verificar linting/formateo (dart format, flutter analyze).
+✅ Fase 2: Navegación y UI Esquelética
+Implementar estructura de navegación principal (BottomNavigationBar, rutas protegidas).
+Crear pantallas vacías con estados placeholder: Inicio, Explorar, Escribir, Biblioteca, Perfil, Notificaciones.
+Diseñar componentes reutilizables: WorkCard, ChapterTile, ActionButton, SkeletonLoader, EmptyState.
+✅ Fase 3: Autenticación y Gestión de Sesión
+Conectar Firebase Auth (Email/Password).
+Crear flujos: Registro, Inicio de sesión, Recuperación de contraseña, Cierre de sesión.
+Implementar AuthProvider con Provider. Guardar estado de autenticación en memoria y validar al iniciar.
+Proteger rutas que requieran sesión. Redirigir a login si no hay token válido.
+✅ Fase 4: Integración Firestore y Modelos de Datos
+Definir entidades Dart puras (User, Work, Chapter, etc.) con json_serializable o constructores manuales.
+Crear repositorios abstractos y sus implementaciones con Firestore (WorkRepository, AuthRepository, etc.).
+Implementar mapeo de documentos ↔ entidades. Manejar errores y estados de carga.
+Probar con Firebase Emulator Suite antes de usar producción.
+✅ Fase 5: Lectura y Publicación de Obras
+Lectura: Implementar visor de capítulos con scroll optimizado, guardado de progreso, soporte markdown básico.
+Escritura: Crear editor con guardado automático en borradores (Firestore o local), validación de campos, publicación controlada (cambio de estado draft → published).
+Listado: Paginación/limitación en Firestore (startAfterDocument), ordenamiento por fecha/popularidad.
+✅ Fase 6: Interacción Social (Comentarios y Corazones)
+Implementar sección de comentarios por capítulo: crear, listar, limitar caracteres, moderación básica.
+Sistema de likes: toggle en UI, transacción en Firestore para evitar conteos duplicados, indicador visual persistente.
+Actualizar UI en tiempo real con StreamProvider para comentarios/likes.
+✅ Fase 7: Guardar y Listas Personalizadas
+Biblioteca: Botón "Guardar en lecturas" → añadir a user_library. Actualizar progreso al leer.
+Listas: CRUD de listas (user_lists). Añadir/eliminar obras. Visualización en grid/lista. Drag & drop opcional para reordenar.
+Sincronización offline básica (configurar Firestore persistence).
+✅ Fase 8: Sistema de Notificaciones
+Configurar firebase_messaging. Solicitar permisos, obtener token, registrar en Firestore bajo el perfil de usuario.
+Crear triggers (Cloud Functions o lógica cliente) que generen documentos en notifications cuando:
+Autor publica nuevo capítulo.
+Alguien comenta en obra guardada.
+Obra guardada se actualiza.
+Implementar pantalla de notificaciones: marcar como leído, limpiar, enlaces profundos (deep links) a la obra/capítulo correspondiente.
+✅ Fase 9: Pulido, Optimización y Pruebas
+Rendimiento: Optimizar imágenes (cached_network_image), evitar rebuilds innecesarios (Consumer selectivos), usar const en widgets estáticos.
+UX: Transiciones suaves, estados de error amigables, reintentos automáticos, manejo de desconexión.
+Pruebas: Unit tests para repositorios y providers, widget tests para flujos críticos, integración con Emulator Suite.
+Accesibilidad y Localización: Verificar contraste, soporte de texto dinámico, cadenas de texto centralizadas.
+✅ Fase 10: Despliegue y Mantenimiento
+Configurar firebase_crashlytics y firebase_analytics.
+Generar builds: flutter build apk/appbundle (Android), flutter build ios (iOS), flutter build web (opcional).
+Subir a tiendas o distribución interna (TestFlight, Play Console Internal Testing).
+Establecer pipeline de releases: versionado semántico, changelog, rollback plan.
+Monitoreo post-lanzamiento: métricas de retención, errores, rendimiento de queries Firestore.
 
 ---
 

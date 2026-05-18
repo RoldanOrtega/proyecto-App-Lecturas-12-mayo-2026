@@ -7,7 +7,7 @@
 **Estética:** Neon Night (Fondo Negro / Rosa Fuerte / Rosa Claro)
 
 ---
-## Herramientas y Entorno de Desarrollo
+## 1. Herramientas y Entorno de Desarrollo
 | Categoría | Herramienta | Propósito |
 |-----------|-------------|-----------|
 | **SDK/Lenguaje** | Flutter 3.x + Dart 3.x | Framework multiplataforma y lenguaje principal |
@@ -19,7 +19,7 @@
 | **Emuladores/Dispositivos** | Android Studio (SDK Manager), Xcode (iOS), Firebase Emulator Suite | Pruebas locales, simulación de backend sin costos |
 
 ---
-##  Principios UI/UX
+##  2. Principios UI/UX
 1. **Enfoque en lectura:** Tipografía serif/sans-serif escalable, interlineado generoso, márgenes amplios, soporte nativo de modo claro/oscuro.
 2. **Navegación intuitiva:** Barra inferior con 4 pestañas: `Inicio`, `Explorar/Buscar`, `Escribir`, `Mi Biblioteca`. Drawer o perfil lateral para `Configuración` y `Notificaciones`.
 3. **Jerarquía visual:** Portadas destacadas, tarjetas con metadatos (autor, género, progreso), indicadores de lectura (porcentaje, último capítulo).
@@ -27,7 +27,7 @@
 5. **Accesibilidad:** Soporte para texto dinámico, contraste WCAG AA, navegación por teclado/lector de pantalla.
 
 ---
-## Dependencias Requeridas (Referencia conceptual)
+## 3. Dependencias Requeridas (Referencia conceptual)
 > 📝 *Se listan por categoría. No se incluye sintaxis YAML para cumplir con "sin código".*
 
 | Categoría | Paquetes Clave | Función |
@@ -40,7 +40,7 @@
 | **Testing** | `mocktail`, `firebase_auth_mocks`, `cloud_firestore_mocks` | Pruebas unitarias y de widget sin conectar a Firebase real |
 
 ---
-Arquitectura y Gestión de Estado (Provider)
+## 4. Arquitectura y Gestión de Estado (Provider)
 - **Patrón:** MVVM ligero (Model-View-ViewModel) adaptado a Flutter.
 - **Capas:**
   - `presentation/`: Pantallas, widgets, temas.
@@ -56,9 +56,9 @@ Arquitectura y Gestión de Estado (Provider)
 
 ---
 
-## 1. Fase de Conceptualización y Diseño (UI/UX)
+## 5. Fase de Conceptualización y Diseño (UI/UX)
 
-### 1.1. Definición de la Paleta de Colores
+### 5.1. Definición de la Paleta de Colores
 
 * **Negro Primario:** `#000000` (Fondo de toda la app; resalta los efectos neón y descansa la vista).
 * **Rosa Fuerte (Neon):** `#FF1493` (Títulos de obras, botones de acción flotante, iconos de navegación activos, logotipos).
@@ -67,7 +67,7 @@ Arquitectura y Gestión de Estado (Provider)
 * **Negro Contraste:** `#000000` (Texto dentro de botones Rosa Claro para legibilidad).
 * **Tipografía:** *Playfair Display* (Serif) para lectura; *Montserrat* (Sans-Serif) para botones y menús.
 
-### 1.2. Mapa de Navegación y Pantallas Principales
+### 5.2. Mapa de Navegación y Pantallas Principales
 
 1. **`SplashScreen`**: Logo de "Lecturas" animado con resplandor neón y verificación de Auth.
 2. **`LoginScreen / RegisterScreen`**: Autenticación con email/password (Estética Rosa sobre Negro).
@@ -93,7 +93,7 @@ Arquitectura y Gestión de Estado (Provider)
 
 ---
 
-## 2. Estructura de Archivos del Proyecto (lib/)
+## 6. Estructura de Archivos del Proyecto (lib/)
 
 He mantenido tu estructura exacta y profesional:
 
@@ -141,9 +141,9 @@ lib/
 
 ---
 
-## 3. Fase de Implementación del Backend (Firebase)
+## 7. Fase de Implementación del Backend (Firebase)
 
-### 3.1. Adaptación de la Base de Datos a Firestore (NoSQL)
+### 7.1. Adaptación de la Base de Datos a Firestore (NoSQL)
 
 | Colección | Atributos Representativos | Acción CRUD |
 | --- | --- | --- |
@@ -155,14 +155,14 @@ lib/
 | **`listas`** | `{ usuarioId, nombreLista, obrasIds: [] }` | **Usuario:** Crear/Edit/Borrar. |
 | **`notificaciones`** | `{ usuarioId, mensaje, tipo, leido: false }` | **Sistema:** Crear. **Lector:** Ver. |
 
-### 3.2. Reglas de Seguridad (Seguridad de Datos)
+### 7.2. Reglas de Seguridad (Seguridad de Datos)
 
 * **Obras:** Lectura pública. Escritura solo si `request.auth.uid == resource.data.autorId`.
 * **Comentarios:** Solo usuarios con cuenta pueden comentar.
 
 ---
 
-## 4. Hoja de Ruta Paso a Paso (Procedimiento)
+## 8. Hoja de Ruta Paso a Paso (Procedimiento)
 
 ### ✅ Fase 1: Configuración y Estructura Base
 1. Inicializar proyecto Flutter con `flutter create`.
@@ -226,7 +226,7 @@ lib/
 
 ---
 
-## 5. Dependencias (pubspec.yaml)
+## 9. Dependencias (pubspec.yaml)
 
 ```yaml
 dependencies:

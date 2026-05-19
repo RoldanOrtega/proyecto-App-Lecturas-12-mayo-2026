@@ -19,7 +19,7 @@
 ---
 
 ## Tecnologías Utilizadas
-<img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/fa9a6f96-f931-4a93-bf61-83a231618c7b" />
+<img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/3267a2f6-df28-433b-8a2a-68509ab61f35" />
 
 ---
 
